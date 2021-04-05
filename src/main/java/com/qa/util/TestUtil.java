@@ -1,11 +1,16 @@
 package com.qa.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.base.TestBase;
 
 import io.restassured.path.json.JsonPath;
@@ -41,6 +46,22 @@ public class TestUtil {
 		List<Object> strValue = jsonpath.getList(path);
 		return strValue;
 		
+	}
+	public static String graphQLToJSON(String payload)
+	{
+		JSONObject jsonObj =  new JSONObject();
+		jsonObj.put("query", payload);
+		return jsonObj.toString();
+		
+	}
+	public void convertStringToJSONObject(String str)
+	{
+		JSONObject jsonbj= new JSONObject(str);
+	}
+	public void writeStringToJSONFileAsString(String jsonString , String strPath) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writerWithDefaultPrettyPrinter().writeValue(new File(strPath), jsonString);
 	}
 	
 }
