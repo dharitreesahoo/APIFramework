@@ -27,5 +27,27 @@ public class AssertionHelper {
 			Assert.assertTrue(false);
 		}
 	}
+	public static void verifyNumber(String s1,String s2,String msg)
+	{
+		if(s1.equalsIgnoreCase(s2))
+		{
+			TestBase.logExtentReport(msg+"ACTUAL"+s1+"EXPECTED"+s2, "info");
+		}else
+		{
+			TestBase.logExtentReport(msg+"ACTUAL"+s1+"EXPECTED"+s2, "fail");
+			Assert.assertTrue(false);
+		}
+	}
+	public static void verifyBoolean(String s1,String s2,String msg)
+	{
+		if(s1.equalsIgnoreCase(s2))
+		{
+			TestBase.logExtentReport(msg+"ACTUAL"+s1+"EXPECTED"+s2, "info");
+		}else
+		{
+			TestBase.logExtentReport(msg+"ACTUAL"+s1+"EXPECTED"+s2, "fail");
+			Assert.assertTrue(false);
+		}
+	}
 
 }
