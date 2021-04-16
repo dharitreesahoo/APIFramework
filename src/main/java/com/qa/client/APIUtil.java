@@ -86,6 +86,19 @@ public void sendRequestWithGraphQL(String requestType, String targetURL , String
 	}
 	
 }
+public void sendRequestWithGraphQL(String requestType, String targetURL , String entityString , Headers headers,String proxy)
+{
+	switch (requestType) {
+	case "GET":
+		responseData = RestAssured.given().proxy(proxy).relaxedHTTPSValidation().headers(headers).body(entityString).when().post(targetURL).thenReturn();
+		
+		break;
+
+	default:
+		break;
+	}
+	
+}
 
 
 }

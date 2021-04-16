@@ -1,6 +1,7 @@
 package com.qa.util;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -62,6 +63,13 @@ public class TestUtil {
 	{
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writerWithDefaultPrettyPrinter().writeValue(new File(strPath), jsonString);
+	}
+	public void writeStringToJSONFile(String jsonString , String strPath) throws IOException
+	{
+		JSONObject responseJSON = new JSONObject(jsonString);
+		FileWriter file =  new FileWriter(strPath);
+		file.write(responseJSON.toString());
+		file.close();
 	}
 	
 }
