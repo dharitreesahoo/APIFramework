@@ -49,5 +49,15 @@ public class AssertionHelper {
 			Assert.assertTrue(false);
 		}
 	}
+	public static void markPass(String message)
+	{
+		TestBase.logExtentReport(message +"marking TC passed..", "pass");
+		Assert.assertTrue(true, message);
+	}public static void markFail(String message)
+	{
+		TestBase.logExtentReport(message +"marking TC fail..", "fail");
+		Assert.assertTrue(false, message);
+	}
+
 
 }

@@ -86,7 +86,7 @@ public void sendRequestWithGraphQL(String requestType, String targetURL , String
 	}
 	
 }
-public void sendRequestWithGraphQL(String requestType, String targetURL , String entityString , Headers headers,String proxy)
+public Response sendRequestWithGraphQL(String requestType, String targetURL , String entityString , Headers headers,String proxy)
 {
 	switch (requestType) {
 	case "GET":
@@ -97,6 +97,7 @@ public void sendRequestWithGraphQL(String requestType, String targetURL , String
 	default:
 		break;
 	}
+	return responseData;
 	
 }
 
