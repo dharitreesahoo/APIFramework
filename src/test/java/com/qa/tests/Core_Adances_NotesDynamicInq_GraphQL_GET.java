@@ -177,6 +177,37 @@ public class Core_Adances_NotesDynamicInq_GraphQL_GET extends TestBase {
 			AssertionHelper.markFail(TCID +":"+Description);
 		}
 	}
+	@Test(priority=3,enabled=true)
+	public void errorForInaldToken() throws IOException
+	{
+		row = excelHelper.getCellRowNum(sheetName, "TCID", "TC3");
+		Header header_authTokenInvalid = new Header("Authorization","Bearer"+" "+authToken+"Inalid");
+		headers = new Headers(header_contentType,header_contentType,header_accept,header_connection,header_DNT,header_origin,header_authTokenInvalid);
+		assignTCDescription(row);
+		getExceldata(row);
+		payload = getPayLoad(row);
+		String queryPayLoadGraphQL = graphQLToJSON(payload);
+		response = apiUtil.sendRequestWithGraphQL(requestType, "HOSTURL", queryPayLoadGraphQL, headers,proxy);
+		if(!response.body().asString().contains("Internal server error")
+				&&!response.body().asString().contains("cannot query field")
+				&&!response.body().asString().contains("Application is not available"))
+		{
+			//Here we cannot go ahead with status code beceause even if reponse has error it gives sttatauuc code 200
+			if(response.body().asString().contains(expectedStatus))
+			{
+				responseUtil.getValueByJSONPath(response, "error.message");
+				AssertionHelper.markPass(TCID +":"+Description);
+			}else{
+				AssertionHelper.markFail(TCID +":"+Description);
+			}
+			
+		}else{
+			responseUtil.displayAppFailureforGrapQL(response);
+			AssertionHelper.markFail(TCID +":"+Description);
+		}
+		//resetting header as good auth Token to continue further TCs
+		headers = new Headers(header_contentType,header_contentType,header_accept,header_connection,header_DNT,header_origin,header_authToken);
+	}
 	//****************************************************8888
 	public void assignTCDescription(int row)
 	{
