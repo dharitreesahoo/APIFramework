@@ -115,6 +115,7 @@
     <version>1.3.0</version>
        
 </dependency>
+<!-- compares actual and expected JSON file -->
 <dependency>
     <groupId>org.skyscreamer</groupId>
     <artifactId>jsonassert</artifactId>

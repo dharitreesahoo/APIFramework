@@ -1,6 +1,8 @@
 package com.qa.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -70,6 +72,23 @@ public class TestUtil {
 		FileWriter file =  new FileWriter(strPath);
 		file.write(responseJSON.toString());
 		file.close();
+	}
+	public String readFromFile(String filePath) throws IOException
+	{
+		String fileContent=null;
+		
+		File file = new File(filePath);
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			byte[] data = new byte[(int)file.length()];
+			fis.read(data);
+			fis.close();
+			fileContent = new String(data , "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileContent;
 	}
 	
 }

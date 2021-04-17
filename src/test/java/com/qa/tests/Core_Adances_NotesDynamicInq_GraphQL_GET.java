@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.json.JSONObject;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -92,8 +96,8 @@ public class Core_Adances_NotesDynamicInq_GraphQL_GET extends TestBase {
 		String queryPayLoadGraphQL = graphQLToJSON(payload);
 		response = apiUtil.sendRequestWithGraphQL(requestType, "HOSTURL", queryPayLoadGraphQL, headers,proxy);
 		if(!response.body().asString().contains("Internal server error")
-				&&response.body().asString().contains("cannot query field")
-				&&response.body().asString().contains("Application is not available"))
+				&&!response.body().asString().contains("cannot query field")
+				&&!response.body().asString().contains("Application is not available"))
 		{
 			//Here we cannot go ahead with status code beceause even if reponse has error it gives sttatauuc code 200
 			if(response.body().asString().contains(expectedStatus))
@@ -111,6 +115,67 @@ public class Core_Adances_NotesDynamicInq_GraphQL_GET extends TestBase {
 		
 		
 		
+	}
+	@Test(priority=2,enabled=true)
+	public void actualExpectedResponse() throws IOException
+	{
+		row = excelHelper.getCellRowNum(sheetName, "TCID", "TC2");
+		assignTCDescription(row);
+		getExceldata(row);
+		payload = getPayLoad(row);
+		String queryPayLoadGraphQL = graphQLToJSON(payload);
+		response = apiUtil.sendRequestWithGraphQL(requestType, "HOSTURL", queryPayLoadGraphQL, headers,proxy);
+		if(!response.body().asString().contains("Internal server error")
+				&&!response.body().asString().contains("cannot query field")
+				&&!response.body().asString().contains("Application is not available"))
+		{
+			//Here we cannot go ahead with status code beceause even if reponse has error it gives sttatauuc code 200
+			if(response.body().asString().contains(expectedStatus))
+			{
+				String actual = response.getBody().asString();
+				String expected =testUtil.readFromFile(expectedResponsePath);
+				CustomComparator comparator = new CustomComparator(
+		                JSONCompareMode.LENIENT, 
+		                	new Customization("data.loanAccount.commitment.LNexpdate", (o1, o2) -> true),
+		                	new Customization("data.loanAccount.commitment.cmnAvailBal", (o1, o2) -> true),
+		                	new Customization("data.loanAccount.commitment.NxtPayData", (o1, o2) -> true));
+		        JSONAssert.assertEquals(actual, expected, comparator);
+				AssertionHelper.markPass(TCID +":"+Description);
+			}else{
+				AssertionHelper.markFail(TCID +":"+Description);
+			}
+			
+		}else{
+			responseUtil.displayAppFailureforGrapQL(response);
+			AssertionHelper.markFail(TCID +":"+Description);
+		}
+	}
+	@Test(priority=3,enabled=true)
+	public void displayAcctNo() throws IOException
+	{
+		row = excelHelper.getCellRowNum(sheetName, "TCID", "TC3");
+		assignTCDescription(row);
+		getExceldata(row);
+		payload = getPayLoad(row);
+		String queryPayLoadGraphQL = graphQLToJSON(payload);
+		response = apiUtil.sendRequestWithGraphQL(requestType, "HOSTURL", queryPayLoadGraphQL, headers,proxy);
+		if(!response.body().asString().contains("Internal server error")
+				&&!response.body().asString().contains("cannot query field")
+				&&!response.body().asString().contains("Application is not available"))
+		{
+			//Here we cannot go ahead with status code beceause even if reponse has error it gives sttatauuc code 200
+			if(response.body().asString().contains(expectedStatus))
+			{
+				responseUtil.getValueByJSONPath(response, "data.loanAcct");
+				AssertionHelper.markPass(TCID +":"+Description);
+			}else{
+				AssertionHelper.markFail(TCID +":"+Description);
+			}
+			
+		}else{
+			responseUtil.displayAppFailureforGrapQL(response);
+			AssertionHelper.markFail(TCID +":"+Description);
+		}
 	}
 	//****************************************************8888
 	public void assignTCDescription(int row)

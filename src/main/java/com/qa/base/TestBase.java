@@ -18,8 +18,6 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
-import junit.framework.Assert;
-
 public class TestBase {
 	public static ExtentReports extent;
 	public static ExtentTest test;
@@ -75,11 +73,9 @@ public class TestBase {
 		if(status.toUpperCase().equals("PASS"))
 		{
 			Childtest.log(Status.PASS, MarkupHelper.createLabel(steps, ExtentColor.GREEN));
-			Assert.assertTrue(true);
 		}else if(status.toUpperCase().equals("FAIL"))
 		{
 			Childtest.log(Status.PASS, MarkupHelper.createLabel(steps, ExtentColor.RED));
-			Assert.assertTrue(false);
 		}else if(status.toUpperCase().equals("WARNING"))
 		{
 			Childtest.log(Status.PASS, MarkupHelper.createLabel(steps, ExtentColor.ORANGE));

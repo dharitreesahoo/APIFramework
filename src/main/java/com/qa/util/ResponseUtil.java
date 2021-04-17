@@ -1,9 +1,11 @@
 package com.qa.util;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.qa.base.TestBase;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import junit.framework.Assert;
 
@@ -105,6 +107,18 @@ public class ResponseUtil {
 	}
 	public void displayResponseAttributeAsList(Response response){
 		TestBase.logExtentReport("Response"+response.getBody().prettyPrint(), "info");
+	}
+	public String getValueByJSONPath(Response response , String path)
+	{
+		JsonPath jsonPath = response.jsonPath();
+		String pathValue = jsonPath.getString(path);
+		return pathValue;
+	}
+	public List<Object> getListalByJSONPath(Response response , String path)
+	{
+		JsonPath jsonPath = response.jsonPath();
+		List<Object> listValue = jsonPath.getList(path);
+		return listValue;
 	}
 
 }
