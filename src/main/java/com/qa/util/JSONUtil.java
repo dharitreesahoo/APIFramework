@@ -1,5 +1,6 @@
 package com.qa.util;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,11 +10,22 @@ import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 
 public class JSONUtil {
-	public static void parseObject(JSONObject json, String key) {
-		System.out.println(json.has(key));
-		System.out.println(json.get(key));
+
+	public static String readFilesAsString() throws IOException {
+		return new String(Files.readAllBytes(Paths.get(".\\src\\main\\java\\com\\qa\\util\\sampleJSON.json")));
 	}
-	public static void getKey(JSONObject json, String key) {
+	//updates json payload any key value..this way also we can provide dynamic json body  .update the required value and then pass
+	public static void parseObject(JSONObject json, String key ,String keyVal) throws IOException {
+		System.out.println(json.get(key));
+		json.put(key, keyVal);
+		 //Write into the file
+        try (FileWriter file = new FileWriter(".\\src\\main\\java\\com\\qa\\util\\sampleJSON.json")) 
+        {
+            file.write(json.toString());
+            System.out.println("Successfully updated json object to file...!!");
+        }
+	}
+	public static void getKey(JSONObject json, String key ,String keyVal) throws IOException {
 		boolean exists = json.has(key);
 		Iterator<?> keys;
 		String nextKeys;
@@ -26,7 +38,7 @@ public class JSONUtil {
 					if (json.get(nextKeys) instanceof JSONObject) {
 
 						if (exists == false) {
-							getKey(json.getJSONObject(nextKeys), key);
+							getKey(json.getJSONObject(nextKeys), key,keyVal );
 						}
 
 					} else if (json.get(nextKeys) instanceof JSONArray) {
@@ -35,7 +47,7 @@ public class JSONUtil {
 							String jsonarrayString = jsonarray.get(i).toString();
 							JSONObject innerJSOn = new JSONObject(jsonarrayString);
 							if (exists == false) {
-								getKey(innerJSOn, key);
+								getKey(innerJSOn, key,keyVal);
 							}
 
 						}
@@ -48,17 +60,12 @@ public class JSONUtil {
 
 			}
 		} else {
-			parseObject(json, key);
+			parseObject(json, key,keyVal);
 		}
 	}
-
-	public static String readFilesAsString() throws IOException {
-		return new String(Files.readAllBytes(Paths.get(".\\src\\main\\java\\com\\qa\\util\\sampleJSON.json")));
-	}
-
 	public static void main(String[] args) throws IOException, ParseException {
 		String inputString = readFilesAsString();
 		JSONObject inputJSONObject = new JSONObject(inputString);
-		getKey(inputJSONObject, "type");
+		getKey(inputJSONObject, "name","dharitree");
 	}
 }
